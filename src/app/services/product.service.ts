@@ -11,15 +11,25 @@ export class ProductService {
   constructor(private httpClient: HttpClient) {}
 
   protected baseUrl = 'http://localhost:8080/api';
+  productEndpoint = 'products';
+  categoryEndpoint = 'category';
 
-  getProductList(): Observable<Product[]> {
-    return this.httpClient.get<GetResponse>(this.baseUrl + '/products').pipe(
-      map((res) => res._embedded.products),
-      catchError((err) => {
-        console.log('Error happens in backend: ', err);
-        return of([]);
-      })
-    );
+  getProductList(categoryId: number): Observable<Product[]> {
+    return this.httpClient
+      .get<GetResponse>(
+        `${this.baseUrl}/${this.productEndpoint}/search/findByCategoryId?id=${categoryId}`
+      )
+      .pipe(
+        map((res) => res._embedded.products),
+        catchError((err) => {
+          console.log('Error happens in backend: ', err);
+          return of([]);
+        })
+      );
+  }
+
+  getProductCategory(): Observable<any> {
+    return of(2);
   }
 }
 
